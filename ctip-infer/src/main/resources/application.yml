@@ -1,0 +1,13 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: infer-service
+  cloud:
+    nacos:
+      discovery:
+        namespace: public
+#        username: nacos
+#        password: nacos
+        server-addr: localhost:8848

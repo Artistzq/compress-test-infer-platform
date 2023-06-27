@@ -1,0 +1,25 @@
+package com.kerbalogy.ctip.main.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+/**
+ * @author yaozongqing@eastmoney.com
+ * @description
+ * @date 2023-06-26
+ **/
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class Result <T> {
+
+    private T data;
+
+    private String msg;
+
+    private Integer code;
+
+}
