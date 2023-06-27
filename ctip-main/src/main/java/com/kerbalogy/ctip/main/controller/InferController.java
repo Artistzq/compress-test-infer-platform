@@ -1,7 +1,9 @@
 package com.kerbalogy.ctip.main.controller;
 
+import com.kerbalogy.ctip.main.dto.MsgDTO;
 import com.kerbalogy.ctip.main.dto.Result;
 import com.kerbalogy.ctip.main.dto.InfoDTO;
+import com.kerbalogy.ctip.main.feign.CtipPyFeign;
 import com.kerbalogy.ctip.main.feign.InferFeign;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +22,9 @@ public class InferController {
     @Autowired
     private InferFeign inferFeign;
 
+    @Autowired
+    private CtipPyFeign ctipPyFeign;
+
     @PostMapping("/nacos-test")
     public Result<InfoDTO> consume(@RequestBody InfoDTO infoDTO) {
         Result<InfoDTO> res = inferFeign.call(infoDTO);
@@ -33,4 +38,8 @@ public class InferController {
         return new Result<String>("test", "666",  11);
     }
 
+    @PostMapping("/py-test")
+    public Result<MsgDTO> d(@RequestBody MsgDTO msgDTO) {
+        return new Result<>(ctipPyFeign.test(msgDTO), "666", 11);
+    }
 }
