@@ -23,6 +23,7 @@
         <spring-cloud.version>2022.0.0-RC2</spring-cloud.version>
         <lombok.version>1.18.20</lombok.version>
         <openapi.version>1.7.0</openapi.version>
+        <servlet-api.version>4.0.1</servlet-api.version>
     </properties>
 
     <dependencies>
@@ -105,6 +106,14 @@
             <url>https://repo.spring.io/milestone</url>
             <snapshots>
                 <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>spring-snapshots</id>
+            <name>Spring Snapshots</name>
+            <url>https://repo.spring.io/libs-snapshot</url>
+            <snapshots>
+                <enabled>true</enabled>
             </snapshots>
         </repository>
     </repositories>

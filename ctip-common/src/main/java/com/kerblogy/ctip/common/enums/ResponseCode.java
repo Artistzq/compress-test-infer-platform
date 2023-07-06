@@ -1,4 +1,4 @@
-package com.kerblogy.ctip.common.models.enums;
+package com.kerblogy.ctip.common.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
