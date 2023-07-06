@@ -1,4 +1,4 @@
-package com.kerbalogy.ctip.infer.dto;
+package com.kerbalogy.ctip.main.infer.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

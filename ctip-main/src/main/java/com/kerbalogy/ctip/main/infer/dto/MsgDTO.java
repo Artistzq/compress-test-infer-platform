@@ -1,4 +1,4 @@
-package com.kerbalogy.ctip.main.dto;
+package com.kerbalogy.ctip.main.infer.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,18 +8,15 @@ import lombok.NoArgsConstructor;
 /**
  * @author yaozongqing@eastmoney.com
  * @description
- * @date 2023-06-26
+ * @date 2023-06-27
  **/
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Result <T> {
+public class MsgDTO {
 
-    private T data;
+    private String talkContent;
 
-    private String msg;
-
-    private Integer code;
-
+    private Integer id;
 }

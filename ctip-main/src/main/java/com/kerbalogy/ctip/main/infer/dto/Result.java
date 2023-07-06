@@ -1,8 +1,9 @@
-package com.kerbalogy.ctip.infer.dto;
+package com.kerbalogy.ctip.main.infer.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @author yaozongqing@eastmoney.com
@@ -12,6 +13,7 @@ import lombok.Data;
 @Data
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
 public class Result <T> {
 
     private T data;

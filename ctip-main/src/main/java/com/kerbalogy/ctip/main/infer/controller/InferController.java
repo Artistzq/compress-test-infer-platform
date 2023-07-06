@@ -1,10 +1,10 @@
-package com.kerbalogy.ctip.main.controller;
+package com.kerbalogy.ctip.main.infer.controller;
 
-import com.kerbalogy.ctip.main.dto.MsgDTO;
-import com.kerbalogy.ctip.main.dto.Result;
-import com.kerbalogy.ctip.main.dto.InfoDTO;
-import com.kerbalogy.ctip.main.feign.CtipPyFeign;
-import com.kerbalogy.ctip.main.feign.InferFeign;
+import com.kerbalogy.ctip.main.infer.dto.MsgDTO;
+import com.kerbalogy.ctip.main.infer.dto.Result;
+import com.kerbalogy.ctip.main.infer.dto.InfoDTO;
+import com.kerbalogy.ctip.main.infer.feign.CtipPyFeign;
+import com.kerbalogy.ctip.main.infer.feign.InferFeign;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;

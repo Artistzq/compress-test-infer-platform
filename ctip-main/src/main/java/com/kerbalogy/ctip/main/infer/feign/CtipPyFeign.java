@@ -1,6 +1,6 @@
-package com.kerbalogy.ctip.main.feign;
+package com.kerbalogy.ctip.main.infer.feign;
 
-import com.kerbalogy.ctip.main.dto.MsgDTO;
+import com.kerbalogy.ctip.main.infer.dto.MsgDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
