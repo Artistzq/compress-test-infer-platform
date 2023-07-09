@@ -12,6 +12,8 @@
         <module>ctip-infer</module>
         <module>ctip-common</module>
         <module>ctip-main</module>
+        <module>ctip-auth</module>
+        <module>ctip-gateway</module>
     </modules>
 
     <properties>
@@ -23,10 +25,12 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <spring-boot.version>3.0.2</spring-boot.version>
         <spring-cloud-alibaba.version>2022.0.0.0-RC2</spring-cloud-alibaba.version>
-        <spring-cloud.version>2022.0.0-RC2</spring-cloud.version>
-        <lombok.version>1.18.20</lombok.version>
+        <spring-cloud.version>2022.0.0</spring-cloud.version>
+        <lombok.version>1.18.26</lombok.version>
         <openapi.version>1.7.0</openapi.version>
         <servlet-api.version>4.0.1</servlet-api.version>
+        <oauth.version>2.2.5.RELEASE</oauth.version>
+        <jwt.version>9.30.2</jwt.version>
     </properties>
 
     <dependencies>
@@ -67,6 +71,25 @@
                 <version>${spring-cloud-alibaba.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+
+            <!-- Security -->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-oauth2</artifactId>
+                <version>${oauth.version}</version>
+            </dependency>
+
+            <!-- 第三方工具 -->
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.nimbusds</groupId>
+                <artifactId>nimbus-jose-jwt</artifactId>
+                <version>${jwt.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
