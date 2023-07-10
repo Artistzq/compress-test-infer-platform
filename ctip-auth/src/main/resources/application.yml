@@ -7,7 +7,7 @@ spring:
     active: dev
 
   application:
-    name: ctip-auth
+    name: ctip-auth-service
 
   cloud:
     nacos:

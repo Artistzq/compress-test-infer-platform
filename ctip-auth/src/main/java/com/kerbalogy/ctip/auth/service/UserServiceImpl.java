@@ -7,6 +7,7 @@ import jakarta.annotation.PostConstruct;
 import org.apache.http.config.MessageConstraints;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AccountExpiredException;
+import org.springframework.security.authentication.CredentialsExpiredException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -43,9 +44,9 @@ public class UserServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        List<UserDTO> findUserList = userList.stream().filter(
-                item -> item.getUsername().equals(username)
-        ).collect(Collectors.toList());
+        List<UserDTO> findUserList = userList.stream()
+                .filter(item -> item.getUsername().equals(username))
+                .toList();
         if (findUserList.size() == 0) {
             throw new UsernameNotFoundException("1");
         }
@@ -57,8 +58,10 @@ public class UserServiceImpl implements UserDetailsService {
             throw new LockedException("3");
         } else if (! securityUser.isAccountNonExpired()) {
             throw new AccountExpiredException("4");
+        } else if (! securityUser.isCredentialsNonExpired()) {
+            throw new CredentialsExpiredException("5");
         }
 
-        return null;
+        return securityUser;
     }
 }
