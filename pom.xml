@@ -31,6 +31,7 @@
         <servlet-api.version>4.0.1</servlet-api.version>
         <oauth.version>2.2.5.RELEASE</oauth.version>
         <jwt.version>9.30.2</jwt.version>
+        <mybatis-plus.version>3.5.3.1</mybatis-plus.version>
     </properties>
 
     <dependencies>
@@ -90,6 +91,13 @@
                 <groupId>com.nimbusds</groupId>
                 <artifactId>nimbus-jose-jwt</artifactId>
                 <version>${jwt.version}</version>
+            </dependency>
+
+            <!-- datasource -->
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-boot-starter</artifactId>
+                <version>${mybatis-plus.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
