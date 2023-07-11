@@ -29,7 +29,7 @@ public class UserVO {
     @Schema(requiredMode = Schema.RequiredMode.REQUIRED, type = "String")
     private String password;
 
-    @NotBlank(message = "密码不能为空")
+    @NotBlank(message = "验证码不能为空")
     @Schema(description = "邮箱验证码", requiredMode = Schema.RequiredMode.REQUIRED, type = "String")
     private String code;
 

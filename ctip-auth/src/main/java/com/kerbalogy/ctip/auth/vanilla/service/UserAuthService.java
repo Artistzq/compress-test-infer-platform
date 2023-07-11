@@ -1,5 +1,6 @@
 package com.kerbalogy.ctip.auth.vanilla.service;
 
+import com.kerbalogy.ctip.auth.vanilla.dto.UserLogoutStatusDTO;
 import com.kerbalogy.ctip.auth.vanilla.vo.UserVO;
 
 import java.util.List;
@@ -16,5 +17,7 @@ public interface UserAuthService {
     void register(UserVO userVO);
 
     void updatePassword(UserVO userVO);
+
+    UserLogoutStatusDTO logout();
 
 }
