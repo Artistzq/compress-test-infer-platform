@@ -6,7 +6,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 /**
- * @author yaozongqing@eastmoney.com
+ * @author yaozongqing@outlook.com
  * @description Http Servlet 工具类
  * @date 2023-07-06
  **/

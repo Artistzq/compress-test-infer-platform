@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * @author yaozongqing@eastmoney.com
+ * @author yaozongqing@outlook.com
  * @description 响应码
  * @date 2023-07-05
  **/

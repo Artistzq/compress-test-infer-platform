@@ -9,7 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * @author yaozongqing@eastmoney.com
+ * @author yaozongqing@outlook.com
  * @description 前端响应类
  * @date 2023-07-05
  **/

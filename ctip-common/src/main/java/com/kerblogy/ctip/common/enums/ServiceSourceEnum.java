@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * @author yaozongqing@eastmoney.com
+ * @author yaozongqing@outlook.com
  * @description 服务源枚举类
  * @date 2023-07-06
  **/

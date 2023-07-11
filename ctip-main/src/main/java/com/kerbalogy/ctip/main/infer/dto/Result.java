@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * @author yaozongqing@eastmoney.com
+ * @author yaozongqing@outlook.com
  * @description
  * @date 2023-06-26
  **/

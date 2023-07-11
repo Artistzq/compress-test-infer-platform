@@ -37,11 +37,11 @@ public class UserAuth {
     private String ipSource;
 
     @TableField(fill = FieldFill.INSERT)
-    private Date createTime;
+    private LocalDateTime createTime;
 
     @TableField(fill = FieldFill.UPDATE)
-    private Date updateTime;
+    private LocalDateTime updateTime;
 
-    private Date lastLoginTime;
+    private LocalDateTime lastLoginTime;
 
 }
