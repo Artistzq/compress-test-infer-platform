@@ -2,12 +2,14 @@ package com.kerbalogy.ctip.gateway;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 /**
  * @author yaozongqing@eastmoney.com
  * @description
  * @date 2023-07-10
  **/
+@EnableDiscoveryClient
 @SpringBootApplication
 public class GatewayApplication {
 

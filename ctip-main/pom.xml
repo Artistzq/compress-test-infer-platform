@@ -14,6 +14,7 @@
     <description>Main Module of CTIP</description>
     <properties>
         <java.version>17</java.version>
+        <ctip-common.version>0.0.1-SNAPSHOT</ctip-common.version>
     </properties>
 
     <dependencies>
