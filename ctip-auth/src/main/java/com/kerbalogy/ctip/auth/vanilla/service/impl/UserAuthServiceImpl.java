@@ -54,8 +54,8 @@ public class UserAuthServiceImpl implements UserAuthService {
         }
         UserInfo userInfo = UserInfo.builder()
                 .email(userVO.getUsername())
-//                .nickname(CommonConstant.DEFAULT_NICKNAME + IdWorker.getId())
-//                .avatar(auroraInfoService.getWebsiteConfig().getUserAvatar())
+                .nickname("111")
+                .avatar("111")
                 .build();
         userInfoMapper.insert(userInfo);
         UserRole userRole = UserRole.builder()
@@ -67,7 +67,7 @@ public class UserAuthServiceImpl implements UserAuthService {
                 .userInfoId(userInfo.getId())
                 .username(userVO.getUsername())
                 .password(BCrypt.hashpw(userVO.getPassword(), BCrypt.gensalt()))
-//                .loginType(LoginTypeEnum.EMAIL.getType())
+                .loginType(1)
                 .build();
         userAuthMapper.insert(userAuth);
     }
