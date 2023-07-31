@@ -54,6 +54,12 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>com.kerbalogy</groupId>
+                <artifactId>ctip-common</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
             <!-- cloud -->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
