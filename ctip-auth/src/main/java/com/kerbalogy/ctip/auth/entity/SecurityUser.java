@@ -1,6 +1,5 @@
-package com.kerbalogy.ctip.auth.vanilla.dto;
+package com.kerbalogy.ctip.auth.entity;
 
-import com.kerblogy.ctip.common.constant.CommonConstant;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,71 +9,56 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.Date;
-import java.util.List;
 
 /**
  * @author yaozongqing@outlook.com
- * @date 2023/7/10 22:03
+ * @date 2023-08-01
  * @description
- */
+ **/
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserDetailsDTO implements UserDetails {
+public class SecurityUser implements UserDetails {
 
-    private Integer id;
-
-    private Integer userInfoId;
-
-    private String email;
-
-    private Integer loginType;
-
+    private Long id;
+    /**
+     * 用户名
+     */
     private String username;
-
+    /**
+     * 用户密码
+     */
     private String password;
+    /**
+     * 用户状态
+     */
+    private Boolean enabled;
+    /**
+     * 权限数据
+     */
+    private Collection<SimpleGrantedAuthority> authorities;
 
-    private List<String> roles;
-
-    private String nickname;
-
-    private String avatar;
-
-    private String intro;
-
-    private String website;
-
-    private Integer isSubscribe;
-
-    private String ipAddress;
-
-    private String ipSource;
-
-    private Integer isDisable;
-
-    private String browser;
-
-    private String os;
-
-    private Date expireTime;
-
-    private Date lastLoginTime;
+    public SecurityUser(User user) {
+        this.setId(user.getId());
+        this.setUsername(user.getUserName());
+        this.setPassword(user.getPassword());
+        this.setEnabled(user.getStatus() == 0);
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles.stream().map(SimpleGrantedAuthority::new).toList();
+        return null;
     }
 
     @Override
     public String getPassword() {
-        return password;
+        return this.password;
     }
 
     @Override
     public String getUsername() {
-        return username;
+        return this.username;
     }
 
     @Override
@@ -84,7 +68,7 @@ public class UserDetailsDTO implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return this.isDisable.equals(CommonConstant.FALSE);
+        return true;
     }
 
     @Override
