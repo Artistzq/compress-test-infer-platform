@@ -8,3 +8,15 @@ spring:
         #        username: nacos
         #        password: nacos
         server-addr: localhost:8848
+  data:
+    redis:
+      host: 101.43.171.120
+      port: 6379
+      password: xxxxxxxxxxxxxxxxxxxxxxxxxxxx
+      database: 0
+ctip:
+  alioss:
+    endpoint: oss-cn-shanghai.aliyuncs.com
+    access-key-id: LTAI5tDYYZWgHYovduZCGuWk
+    access-key-secret: xxxxxxxxxxxxxxxxxxxxxxxxxxxx
+    bucket-name: kerblogy-ctip
