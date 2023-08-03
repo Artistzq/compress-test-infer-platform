@@ -1,5 +1,6 @@
 package com.kerbalogy.ctip.infer.od.service;
 
+import com.kerbalogy.ctip.infer.od.dto.ObjectDetectArgs;
 import com.kerblogy.ctip.common.models.dto.ServiceResponse;
 
 /**
@@ -8,7 +9,5 @@ import com.kerblogy.ctip.common.models.dto.ServiceResponse;
  * @description
  **/
 public interface ObjectDetectService {
-
-    ServiceResponse<String> requestOd();
-
+    byte[] requestOd(byte[] bytes, ObjectDetectArgs args);
 }
