@@ -1,14 +1,16 @@
 package com.kerbalogy.ctip.infer.text2img.controller;
 
+import com.kerbalogy.ctip.infer.text2img.dto.StableDiffusionParamDTO;
 import com.kerbalogy.ctip.infer.text2img.service.TextToImgService;
 import com.kerbalogy.ctip.infer.text2img.vo.SdFullRequestVO;
+import com.kerblogy.ctip.common.kafka.KafkaMessage;
+import com.kerblogy.ctip.common.kafka.KafkaMessageCode;
+import com.kerblogy.ctip.common.kafka.KafkaMessageResult;
 import com.kerblogy.ctip.common.models.vo.JsonResultVO;
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author yaozongqing@outlook.com
@@ -24,13 +26,22 @@ public class TextToImgController {
     TextToImgService textToImgService;
 
     @PostMapping("/sd")
-    public JsonResultVO<Boolean> requestTextToImg(String text) {
-        return JsonResultVO.success(textToImgService.requestTextToImgStableDiffusion(text));
+    public JsonResultVO<Boolean> requestTextToImg(@RequestParam String text) {
+        return requestTextToImg(SdFullRequestVO.builder()
+                .prompt(text)
+                .build());
     }
 
     @PostMapping("/sd_full_param")
     public JsonResultVO<Boolean> requestTextToImg(@RequestBody SdFullRequestVO sdFullRequestVO) {
-        return JsonResultVO.success(true);
+        StableDiffusionParamDTO paramDTO = new StableDiffusionParamDTO();
+        BeanUtils.copyProperties(sdFullRequestVO, paramDTO);
+        Boolean success = textToImgService.requestTextToImgStableDiffusion(paramDTO);
+        if (success) {
+            return JsonResultVO.success(true, KafkaMessageResult.SEND_SUCCESS.getMsg());
+        } else {
+            return JsonResultVO.fail(KafkaMessageResult.SEND_FAIL.getMsg());
+        }
     }
 
 }

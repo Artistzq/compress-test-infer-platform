@@ -2,9 +2,11 @@ package com.kerblogy.ctip.common.kafka;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.UUID;
 
 /**
  * @author yaozongqing@outlook.com
@@ -13,6 +15,8 @@ import java.util.Date;
  **/
 @AllArgsConstructor
 @Builder
+@NoArgsConstructor
+@Data
 public class KafkaMessage <T> {
 
     private String message;
@@ -23,12 +27,15 @@ public class KafkaMessage <T> {
 
     private Date time;
 
+    private String messageId;
+
     private static <T> KafkaMessage<T> init(String message, int code, T data, Date time) {
         return KafkaMessage.<T>builder()
                 .message(message)
                 .code(code)
                 .data(data)
                 .time(time)
+                .messageId(UUID.randomUUID().toString().replaceAll("-", ""))
                 .build();
     }
 
