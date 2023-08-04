@@ -11,3 +11,19 @@ spring:
 #        username: nacos
 #        password: nacos
         server-addr: localhost:8848
+
+art:
+  spring:
+    kafka:
+      config:
+        main:
+          bootstrap-servers: localhost:9092
+        vice:
+          bootstrap-servers: localhost:9093
+      default-config: main
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: info,health,beans,env

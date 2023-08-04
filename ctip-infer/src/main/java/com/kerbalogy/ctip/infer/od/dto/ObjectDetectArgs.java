@@ -1,4 +1,4 @@
-package com.kerbalogy.ctip.infer.text2img.vo;
+package com.kerbalogy.ctip.infer.od.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,17 +7,17 @@ import lombok.NoArgsConstructor;
 
 /**
  * @author yaozongqing@outlook.com
- * @date 2023-08-01
+ * @date 2023-08-03
  * @description
  **/
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class SdFullRequestVO {
+public class ObjectDetectArgs {
 
-    private String prompt;
+    int id;
 
-    private String negativePrompt;
+    String name;
 
 }
