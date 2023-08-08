@@ -8,7 +8,10 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author yaozongqing@outlook.com
@@ -21,6 +24,9 @@ import java.util.Collection;
 @Builder
 public class SecurityUser implements UserDetails {
 
+    /**
+     * 用户ID
+     */
     private Long id;
     /**
      * 用户名
@@ -37,18 +43,25 @@ public class SecurityUser implements UserDetails {
     /**
      * 权限数据
      */
-    private Collection<SimpleGrantedAuthority> authorities;
+    private List<Role> roles;
+    /**
+     * 角色ID
+     */
+    private Integer roleId;
 
-    public SecurityUser(User user) {
+    public SecurityUser(LoginUser user) {
         this.setId(user.getId());
-        this.setUsername(user.getUserName());
+        this.setUsername(user.getUsername());
         this.setPassword(user.getPassword());
-        this.setEnabled(user.getStatus() == 0);
+        this.setEnabled(user.getEnabled());
+        this.setRoleId(user.getRoleId());
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return roles.stream()
+                .map(item -> new SimpleGrantedAuthority(item.getAuthority()))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -78,6 +91,6 @@ public class SecurityUser implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return enabled;
     }
 }

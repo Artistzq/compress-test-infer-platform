@@ -1,6 +1,6 @@
 package com.kerbalogy.ctip.auth.mapper;
 
-import com.kerbalogy.ctip.auth.entity.User;
+import com.kerbalogy.ctip.auth.entity.LoginUser;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,7 +15,7 @@ class UserMapperTest {
 
     @Test
     public void test() {
-        List<User> users = userMapper.selectList(null);
+        List<LoginUser> users = userMapper.selectList(null);
         users.forEach(System.out::println);
     }
 
