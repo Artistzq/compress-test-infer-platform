@@ -1,11 +1,9 @@
 package com.kerbalogy.ctip.auth.config;
 
-import com.kerbalogy.ctip.auth.filter.JwtLoginFilter;
-import com.kerbalogy.ctip.auth.filter.JwtVerifyFilter;
-import com.kerbalogy.ctip.auth.handler.CustomAuthenticationEntryPoint;
-import com.kerbalogy.ctip.auth.handler.UserAuthAccessDeniedHandler;
-import com.kerbalogy.ctip.auth.service.impl.UserDetailsServiceImpl;
-import com.kerbalogy.ctip.auth.util.RedisCache;
+import com.kerbalogy.ctip.auth.filter.JwtAuthenticationFilter;
+import com.kerbalogy.ctip.auth.security.handler.UserAuthAuthenticationEntryPoint;
+import com.kerbalogy.ctip.auth.security.handler.UserAuthAccessDeniedHandler;
+import com.kerbalogy.ctip.auth.security.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,9 +13,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -26,24 +22,27 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
  * @date 2023-08-07
  * @description
  **/
-@Configuration
-@EnableWebSecurity
+//@Configuration
+//@EnableWebSecurity
 public class SecurityConfig {
 
-    @Autowired
-    UserDetailsServiceImpl userDetailsService;
+//    @Autowired
+//    UserDetailsServiceImpl userDetailsService;
 
 //    @Autowired
 //    JwtLoginFilter jwtLoginFilter;
 
-    @Autowired
-    JwtVerifyFilter jwtVerifyFilter;
+//    @Autowired
+//    JwtVerifyFilter jwtVerifyFilter;
 
-    @Autowired
-    UserAuthAccessDeniedHandler userAuthAccessDeniedHandler;
+//    @Autowired
+//    JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    @Autowired
-    CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+//    @Autowired
+//    UserAuthAccessDeniedHandler userAuthAccessDeniedHandler;
+//
+//    @Autowired
+//    UserAuthAuthenticationEntryPoint userAuthAuthenticationEntryPoint;
 
 
     private String[] loadExcludePath() {
@@ -62,14 +61,14 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
-    AuthenticationManager authenticationManager(HttpSecurity httpSecurity) throws Exception {
-        return httpSecurity.getSharedObject(AuthenticationManagerBuilder.class)
-                .userDetailsService(userDetailsService)
-                .passwordEncoder(passwordEncoder())
-                .and()
-                .build();
-    }
+//    @Bean
+//    AuthenticationManager authenticationManager(HttpSecurity httpSecurity) throws Exception {
+//        return httpSecurity.getSharedObject(AuthenticationManagerBuilder.class)
+//                .userDetailsService(userDetailsService)
+//                .passwordEncoder(passwordEncoder())
+//                .and()
+//                .build();
+//    }
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -92,11 +91,11 @@ public class SecurityConfig {
 //                                        .addFilter(jwtLoginFilter)
 //                                        .addFilter(jwtVerifyFilter)
                                         // 已认证但是权限不够
-                                        .exceptionHandling().accessDeniedHandler(userAuthAccessDeniedHandler)
-                                        .and()
-                                        // 未认证（未登陆）
-                                        .exceptionHandling().authenticationEntryPoint(customAuthenticationEntryPoint)
-                                        .and()
+//                                        .exceptionHandling().accessDeniedHandler(userAuthAccessDeniedHandler)
+//                                        .and()
+//                                        // 未认证（未登陆）
+//                                        .exceptionHandling().authenticationEntryPoint(userAuthAuthenticationEntryPoint)
+//                                        .and()
                                         // 禁用 session
                                         .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
                             } catch (Exception e) {
@@ -104,7 +103,6 @@ public class SecurityConfig {
                             }
                         }
                 );
-//        httpSecurity.addFilterBefore(jwtVerifyFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }
 

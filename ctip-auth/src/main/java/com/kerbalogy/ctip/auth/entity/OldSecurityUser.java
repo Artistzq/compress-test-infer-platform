@@ -8,7 +8,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,7 +21,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class SecurityUser implements UserDetails {
+public class OldSecurityUser implements UserDetails {
 
     /**
      * 用户ID
@@ -43,13 +42,13 @@ public class SecurityUser implements UserDetails {
     /**
      * 权限数据
      */
-    private List<Role> roles;
+    private List<OldRole> oldRoles;
     /**
      * 角色ID
      */
     private Integer roleId;
 
-    public SecurityUser(LoginUser user) {
+    public OldSecurityUser(LoginUser user) {
         this.setId(user.getId());
         this.setUsername(user.getUsername());
         this.setPassword(user.getPassword());
@@ -59,7 +58,7 @@ public class SecurityUser implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles.stream()
+        return oldRoles.stream()
                 .map(item -> new SimpleGrantedAuthority(item.getAuthority()))
                 .collect(Collectors.toList());
     }

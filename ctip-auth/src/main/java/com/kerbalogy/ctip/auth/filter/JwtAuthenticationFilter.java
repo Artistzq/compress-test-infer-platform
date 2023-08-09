@@ -1,6 +1,6 @@
 package com.kerbalogy.ctip.auth.filter;
 
-import com.kerbalogy.ctip.auth.entity.SecurityUser;
+import com.kerbalogy.ctip.auth.entity.OldSecurityUser;
 import com.kerbalogy.ctip.auth.util.JwtUtil;
 import com.kerbalogy.ctip.auth.util.RedisCache;
 import com.nimbusds.jwt.JWTClaimsSet;
@@ -9,10 +9,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -22,11 +20,11 @@ import java.util.Objects;
 
 /**
  * @author yaozongqing@outlook.com
- * @date 2023-08-07
- * @description 对Token验证和续签
+ * @date 2023-08-09
+ * @description
  **/
 @Component
-public class JwtVerifyFilter extends OncePerRequestFilter {
+public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Autowired
     RedisCache redisCache;
@@ -35,7 +33,7 @@ public class JwtVerifyFilter extends OncePerRequestFilter {
     JwtUtil jwtUtil;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
         String token = request.getHeader("Authorization_Token");
         if (token == null) {
             // 不应该在此处抛出异常，抛出异常会重定向至/error，但/error并未放通
@@ -54,8 +52,8 @@ public class JwtVerifyFilter extends OncePerRequestFilter {
 
         //从redis中获取用户信息
         String redisKey = "userInfo:" + userId;
-        SecurityUser securityUser = redisCache.getCacheObject(redisKey);
-        if(Objects.isNull(securityUser)){
+        OldSecurityUser oldSecurityUser = redisCache.getCacheObject(redisKey);
+        if(Objects.isNull(oldSecurityUser)){
             throw new RuntimeException("用户未登录");
         }
 
@@ -63,7 +61,7 @@ public class JwtVerifyFilter extends OncePerRequestFilter {
 
         //存入SecurityContextHolder
         UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(securityUser,null,securityUser.getAuthorities());
+                new UsernamePasswordAuthenticationToken(oldSecurityUser,null, oldSecurityUser.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         //放行
         chain.doFilter(request, response);

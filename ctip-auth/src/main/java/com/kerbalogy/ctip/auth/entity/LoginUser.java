@@ -37,7 +37,7 @@ public class LoginUser {
     /**
      * 权限数据
      */
-    private List<Role> roles;
+    private List<OldRole> oldRoles;
     /**
      * 角色ID
      */

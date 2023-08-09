@@ -1,4 +1,4 @@
-package com.kerbalogy.ctip.auth.handler;
+package com.kerbalogy.ctip.auth.security.handler;
 
 import com.kerblogy.ctip.common.models.vo.JsonResultVO;
 import com.kerblogy.ctip.common.util.json.JacksonUtil;
@@ -11,16 +11,13 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author yaozongqing@outlook.com
  * @date 2023-08-07
  * @description
  **/
-@Component
-public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
+public class UserAuthAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
