@@ -7,16 +7,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author yaozongqing@outlook.com
- * @date 2023-08-07
+ * @date 2023-08-10
  * @description
  **/
-@RequestMapping("/test")
 @RestController
-public class HelloController {
+@RequestMapping("/api/resource/auth")
+public class ResourceController {
 
-    @GetMapping("/hello")
-    public JsonResultVO<?> test() {
-        return JsonResultVO.success("Hello");
+    @GetMapping("/name")
+    public JsonResultVO<?> name() {
+        return JsonResultVO.success("测试受保护资源");
     }
 
 }

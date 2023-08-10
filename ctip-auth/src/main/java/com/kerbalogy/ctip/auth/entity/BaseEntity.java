@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * @author yaozongqing@outlook.com
@@ -15,7 +16,7 @@ import java.time.LocalDateTime;
  **/
 @Getter
 @Setter
-@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, property = "className", visible = true)
+//@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, property = "className", visible = true)
 public class BaseEntity{
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
@@ -25,14 +26,14 @@ public class BaseEntity{
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @TableField(value = "created_date", fill = FieldFill.INSERT)
-    private LocalDateTime createdDate;
+    private Date createdDate;
 
     @TableField(value = "updated_by", fill = FieldFill.INSERT_UPDATE)
     private String updatedBy;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @TableField(value = "updated_date", fill = FieldFill.INSERT_UPDATE)
-    private LocalDateTime updatedDate;
+    private Date updatedDate;
 
     @TableLogic
     @TableField("deleted")

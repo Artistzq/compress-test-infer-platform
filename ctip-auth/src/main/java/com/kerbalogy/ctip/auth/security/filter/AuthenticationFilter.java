@@ -9,6 +9,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,6 +23,7 @@ import java.nio.file.AccessDeniedException;
  * @date 2023-08-09
  * @description
  **/
+@Slf4j
 public class AuthenticationFilter extends OncePerRequestFilter {
 
     private final RedisTokenService redisTokenService;
@@ -36,6 +38,9 @@ public class AuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
+
+        log.info("Enter: AuthenticationFilter");
+
         String token = request.getHeader(HeaderConstant.HEADER_TOKEN);
         if (token == null) {
             filterChain.doFilter(request, response);
@@ -63,8 +68,11 @@ public class AuthenticationFilter extends OncePerRequestFilter {
         redisTokenService.refreshExpiration(token);
         //存入SecurityContextHolder
         SecurityContextHolder.getContext().setAuthentication(authentication);
+//        System.out.println(SecurityContextHolder.getContext().getAuthentication().getCredentials());
+
         //放行
         filterChain.doFilter(request, response);
 
+        log.info("Quit: AuthenticationFilter");
     }
 }

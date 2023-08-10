@@ -1,6 +1,10 @@
 package com.kerbalogy.ctip.auth.security.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.kerbalogy.ctip.auth.entity.User;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -19,9 +23,21 @@ import java.util.List;
  **/
 public class SecurityUserDetails implements UserDetails {
 
-    private final User user;
+    @JsonInclude
+    private User user;
 
-    private final List<Long> roleIds;
+    @JsonInclude
+    private List<Long> roleIds;
+
+
+    public SecurityUserDetails() {
+
+    }
+
+    public SecurityUserDetails(User user, List<Long> roleIds) {
+        this.user = user;
+        this.roleIds = roleIds;
+    }
 
     public User getUser() {
         return user;
@@ -31,11 +47,7 @@ public class SecurityUserDetails implements UserDetails {
         return roleIds;
     }
 
-    public SecurityUserDetails(User user, List<Long> roleIds) {
-        this.user = user;
-        this.roleIds = roleIds;
-    }
-
+    @JsonIgnore
     public static SecurityUserDetails getCurrentUser() {
         SecurityContext securityContext = SecurityContextHolder.getContext();
         Authentication authentication = securityContext.getAuthentication();
@@ -47,6 +59,7 @@ public class SecurityUserDetails implements UserDetails {
         return null;
     }
 
+    @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> authorities = new ArrayList<>();
@@ -54,31 +67,37 @@ public class SecurityUserDetails implements UserDetails {
         return authorities;
     }
 
+    @JsonIgnore
     @Override
     public String getPassword() {
         return user.getPassword();
     }
 
+    @JsonIgnore
     @Override
     public String getUsername() {
         return user.getUsername();
     }
 
+    @JsonIgnore
     @Override
     public boolean isAccountNonExpired() {
         return true;
     }
 
+    @JsonIgnore
     @Override
     public boolean isAccountNonLocked() {
         return true;
     }
 
+    @JsonIgnore
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
+    @JsonIgnore
     @Override
     public boolean isEnabled() {
         return true;

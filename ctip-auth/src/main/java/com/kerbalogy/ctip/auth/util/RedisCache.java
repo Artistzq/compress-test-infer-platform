@@ -1,6 +1,7 @@
 package com.kerbalogy.ctip.auth.util;
 
 
+import com.kerblogy.ctip.common.util.json.JacksonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.BoundSetOperations;
 import org.springframework.data.redis.core.HashOperations;
@@ -44,7 +45,7 @@ public class RedisCache
      */
     public <T> void setCacheObject(final String key, final T value, final Integer timeout, final TimeUnit timeUnit)
     {
-        redisTemplate.opsForValue().set(key, value, timeout, timeUnit);
+        redisTemplate.opsForValue().set(key, JacksonUtil.to(value), timeout, timeUnit);
     }
 
     /**
@@ -82,6 +83,12 @@ public class RedisCache
     {
         ValueOperations<String, T> operation = redisTemplate.opsForValue();
         return operation.get(key);
+    }
+
+    public <T> T getCacheObject(final String key, Class<T> clazz) {
+        ValueOperations<String, T> operation = redisTemplate.opsForValue();
+        String elem = (String) operation.get(key);
+        return JacksonUtil.from(elem, clazz);
     }
 
     /**

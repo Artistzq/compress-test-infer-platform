@@ -3,16 +3,20 @@ package com.kerbalogy.ctip.auth.security.config;
 import com.kerbalogy.ctip.auth.security.filter.AuthenticationFilter;
 import com.kerbalogy.ctip.auth.security.handler.*;
 import com.kerbalogy.ctip.auth.security.service.RedisTokenService;
+import com.kerbalogy.ctip.auth.security.service.UserDetailsServiceImpl;
 import com.kerbalogy.ctip.auth.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -34,6 +38,12 @@ public class SecurityConfiguration {
 
     @Autowired
     JwtUtil jwtUtil;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
+    @Autowired
+    UserDetailsServiceImpl userDetailsService;
 
     private String[] loadExcludePath() {
         return new String[]{
@@ -68,6 +78,7 @@ public class SecurityConfiguration {
                                 auth// 放通静态
                                         .requestMatchers(loadExcludePath()).permitAll()
                                         .requestMatchers(publicEndpoints()).permitAll()
+                                        .anyRequest().authenticated()
                                         .and()
                                         // 异常处理
                                         .exceptionHandling()

@@ -5,6 +5,7 @@ import com.kerbalogy.ctip.auth.entity.UserRole;
 import com.kerbalogy.ctip.auth.security.entity.SecurityUserDetails;
 import com.kerbalogy.ctip.auth.service.UserRoleService;
 import com.kerbalogy.ctip.auth.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
  * @description
  **/
 @Service
+@Slf4j
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
@@ -31,6 +33,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        log.info("Enter: UserDetailsServiceImpl");
         return Optional.ofNullable(userService.getByUsername(username))
                 .map(this::createUserDetails)
                 .orElseThrow(() -> new UsernameNotFoundException("用户不存在"));

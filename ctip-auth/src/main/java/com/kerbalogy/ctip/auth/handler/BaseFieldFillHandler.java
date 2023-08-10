@@ -5,6 +5,7 @@ import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Optional;
 
 /**
@@ -26,7 +27,7 @@ public class BaseFieldFillHandler implements MetaObjectHandler {
         }
 
         if (createDate == null) {
-            this.strictInsertFill(metaObject, "createdDate", LocalDateTime.class, LocalDateTime.now());
+            this.strictInsertFill(metaObject, "createdDate", Date.class, new Date());
         }
     }
 
@@ -40,7 +41,7 @@ public class BaseFieldFillHandler implements MetaObjectHandler {
         }
 
         if (updateDate == null) {
-            this.strictUpdateFill(metaObject, "updatedDate", LocalDateTime.class, LocalDateTime.now());
+            this.strictUpdateFill(metaObject, "updatedDate", Date.class, new Date());
         }
     }
 }

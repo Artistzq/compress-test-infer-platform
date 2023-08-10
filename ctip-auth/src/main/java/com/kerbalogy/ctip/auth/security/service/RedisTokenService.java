@@ -4,6 +4,7 @@ import com.kerbalogy.ctip.auth.entity.OldSecurityUser;
 import com.kerbalogy.ctip.auth.security.entity.SecurityUserDetails;
 import com.kerbalogy.ctip.auth.util.JwtUtil;
 import com.kerbalogy.ctip.auth.util.RedisCache;
+import com.kerblogy.ctip.common.util.json.JacksonUtil;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,9 @@ public class RedisTokenService {
         } catch (NullPointerException e) {
             throw new RuntimeException("当前SecurityUserDetails不含有User", e);
         }
+
+        System.out.println(JacksonUtil.to(authentication.getPrincipal()));
+        System.out.println(authentication.getPrincipal());
         redisCache.setCacheObject(AUTHORITIES_KEY.concat(token), authentication.getPrincipal(), expiration, DEFAULT_TIME_UNIT);
         return token;
     }
@@ -61,7 +65,7 @@ public class RedisTokenService {
     }
 
     public Authentication getAuthentication(String token) {
-        SecurityUserDetails userDetails = (SecurityUserDetails) redisCache.getCacheObject(AUTHORITIES_KEY.concat(token));
+        SecurityUserDetails userDetails = redisCache.getCacheObject(AUTHORITIES_KEY.concat(token), SecurityUserDetails.class);
         if (userDetails != null) {
             return new UsernamePasswordAuthenticationToken(userDetails, token, userDetails.getAuthorities());
         }
@@ -69,7 +73,7 @@ public class RedisTokenService {
     }
 
     public Boolean validateToken(String token) {
-        SecurityUserDetails userDetails = (SecurityUserDetails) redisCache.getCacheObject(AUTHORITIES_KEY.concat(token));
+        SecurityUserDetails userDetails = redisCache.getCacheObject(AUTHORITIES_KEY.concat(token), SecurityUserDetails.class);
         return userDetails != null;
     }
 }

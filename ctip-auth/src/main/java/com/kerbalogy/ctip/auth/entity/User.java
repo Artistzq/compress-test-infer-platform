@@ -2,8 +2,10 @@ package com.kerbalogy.ctip.auth.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 /**
  * @author yaozongqing@outlook.com
@@ -11,6 +13,8 @@ import lombok.EqualsAndHashCode;
  * @description 用户表
  **/
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @TableName("tb_user")
 public class User extends BaseEntity{

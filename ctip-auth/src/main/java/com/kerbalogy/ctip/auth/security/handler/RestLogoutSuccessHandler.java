@@ -34,6 +34,7 @@ public class RestLogoutSuccessHandler implements LogoutSuccessHandler {
     }
 
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+
         String token = request.getHeader(HeaderConstant.HEADER_TOKEN);
         redisTokenService.removeToken(token);
 
