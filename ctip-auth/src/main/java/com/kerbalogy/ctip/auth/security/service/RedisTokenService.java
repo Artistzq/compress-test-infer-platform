@@ -1,20 +1,14 @@
 package com.kerbalogy.ctip.auth.security.service;
 
-import com.kerbalogy.ctip.auth.entity.OldSecurityUser;
 import com.kerbalogy.ctip.auth.security.entity.SecurityUserDetails;
-import com.kerbalogy.ctip.auth.util.JwtUtil;
 import com.kerbalogy.ctip.auth.util.RedisCache;
 import com.kerblogy.ctip.common.util.json.JacksonUtil;
-import jakarta.annotation.PostConstruct;
-import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -35,12 +29,12 @@ public class RedisTokenService {
     private RedisCache redisCache;
 
     @Autowired
-    private JwtUtil jwtUtil;
+    private JwtService jwtService;
 
     public String createToken(Authentication authentication) {
         String token = null;
         try {
-            token = jwtUtil.createJWT(SecurityUserDetails.getCurrentUser().getUser().getId().toString());
+            token = jwtService.createJWT(SecurityUserDetails.getCurrentUser().getUser().getId().toString());
         } catch (NullPointerException e) {
             throw new RuntimeException("当前SecurityUserDetails不含有User", e);
         }

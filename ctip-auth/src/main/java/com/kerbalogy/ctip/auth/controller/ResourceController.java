@@ -2,6 +2,7 @@ package com.kerbalogy.ctip.auth.controller;
 
 import com.kerblogy.ctip.common.models.vo.JsonResultVO;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/resource/auth")
 public class ResourceController {
 
-    @GetMapping("/name")
+    @PostMapping("/name")
     public JsonResultVO<?> name() {
         return JsonResultVO.success("测试受保护资源");
     }

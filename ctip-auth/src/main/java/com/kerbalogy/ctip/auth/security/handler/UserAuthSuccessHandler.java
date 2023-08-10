@@ -34,6 +34,7 @@ public class UserAuthSuccessHandler implements AuthenticationSuccessHandler {
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+        System.out.println("成功");
         // 颁发token
         String token = redisTokenService.createToken(authentication);
         User user = ((SecurityUserDetails) authentication.getPrincipal()).getUser();
@@ -42,6 +43,8 @@ public class UserAuthSuccessHandler implements AuthenticationSuccessHandler {
                 .username(user.getUsername())
                 .phone(user.getPhone())
                 .build();
+        // 如果有旧token，就删除旧token
+
 
         JsonResultVO<LoginDTO> result = JsonResultVO.success(loginDTO);
 

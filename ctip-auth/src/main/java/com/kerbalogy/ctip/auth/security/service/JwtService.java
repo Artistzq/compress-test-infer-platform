@@ -1,4 +1,4 @@
-package com.kerbalogy.ctip.auth.util;
+package com.kerbalogy.ctip.auth.security.service;
 
 import com.kerblogy.ctip.common.util.json.JacksonUtil;
 import com.nimbusds.jose.JOSEException;
@@ -28,12 +28,12 @@ import java.util.UUID;
  * @description
  **/
 @Component
-public class JwtUtil {
+public class JwtService {
 
     @Value("${jwt.ttl}")
     public Long JWT_TTL = 60 * 60 * 1000L; // 60 * 60 * 1000 (1 hour)
 
-//    @Value("${jwt.key}")
+    @Value("${jwt.key}")
     public String JWT_KEY = "jwt-key";
 
     public String getUUID() {
@@ -48,13 +48,13 @@ public class JwtUtil {
         return createJWT(getUUID(), subject, ttlMillis);
     }
 
-    public <V> String createJWT(String id, V object, Long ttlMillis) {
+    public String createJWT(String id, Object object, Long ttlMillis) {
         SecretKey secretKey = generalKey();
 
         JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
                 .jwtID(id)
                 .subject(JacksonUtil.to(object))
-                .issuer("kerb")
+                .issuer("ctip")
                 .issueTime(new Date())
                 .expirationTime(new Date(System.currentTimeMillis() + ttlMillis))
                 .build();
@@ -87,8 +87,15 @@ public class JwtUtil {
         }
     }
 
-    public <T> T parseClaim(JWTClaimsSet jwtClaimsSet, Class<T> clazz) {
+    public <T> T parseJwtSubject(String token, Class<T> clazz) {
+        JWTClaimsSet jwtClaimsSet = parseJWT(token);
         return JacksonUtil.from(jwtClaimsSet.getSubject(), clazz);
+    }
+
+    public boolean valid(String jwt) {
+        JWTClaimsSet jwtClaimsSet = parseJWT(jwt);
+        Date expirationTime = jwtClaimsSet.getExpirationTime();
+        return !expirationTime.before(new Date());
     }
 
     public SecretKey generalKey() {

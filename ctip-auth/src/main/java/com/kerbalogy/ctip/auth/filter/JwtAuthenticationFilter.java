@@ -1,9 +1,8 @@
 package com.kerbalogy.ctip.auth.filter;
 
 import com.kerbalogy.ctip.auth.entity.OldSecurityUser;
-import com.kerbalogy.ctip.auth.util.JwtUtil;
+import com.kerbalogy.ctip.auth.security.service.JwtService;
 import com.kerbalogy.ctip.auth.util.RedisCache;
-import com.nimbusds.jwt.JWTClaimsSet;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,7 +29,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     RedisCache redisCache;
 
     @Autowired
-    JwtUtil jwtUtil;
+    JwtService jwtService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
@@ -44,8 +43,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         // 解析token
-        JWTClaimsSet jwtClaimsSet = jwtUtil.parseJWT(token);
-        String userId = jwtUtil.parseClaim(jwtClaimsSet, String.class);
+        String userId = jwtService.parseJwtSubject(token, String.class);
         if (redisCache.getCacheObject(token) == null) {
             throw new AccessDeniedException("登录凭证已过期");
         }

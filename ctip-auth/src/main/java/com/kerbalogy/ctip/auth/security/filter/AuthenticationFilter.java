@@ -2,15 +2,12 @@ package com.kerbalogy.ctip.auth.security.filter;
 
 import com.kerbalogy.ctip.auth.constant.HeaderConstant;
 import com.kerbalogy.ctip.auth.security.service.RedisTokenService;
-import com.kerbalogy.ctip.auth.util.JwtUtil;
-import com.kerbalogy.ctip.auth.util.RedisCache;
-import com.nimbusds.jwt.JWTClaimsSet;
+import com.kerbalogy.ctip.auth.security.service.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -28,11 +25,11 @@ public class AuthenticationFilter extends OncePerRequestFilter {
 
     private final RedisTokenService redisTokenService;
 
-    private final JwtUtil jwtUtil;
+    private final JwtService jwtService;
 
-    public AuthenticationFilter(RedisTokenService redisTokenService, JwtUtil jwtUtil) {
+    public AuthenticationFilter(RedisTokenService redisTokenService, JwtService jwtService) {
         this.redisTokenService = redisTokenService;
-        this.jwtUtil = jwtUtil;
+        this.jwtService = jwtService;
     }
 
     @Override

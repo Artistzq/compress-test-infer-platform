@@ -1,20 +1,14 @@
 package com.kerbalogy.ctip.auth.security.handler;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kerbalogy.ctip.auth.constant.HeaderConstant;
-import com.kerbalogy.ctip.auth.security.entity.SecurityUserDetails;
 import com.kerbalogy.ctip.auth.security.service.RedisTokenService;
-import com.kerbalogy.ctip.auth.util.JwtUtil;
-import com.kerbalogy.ctip.auth.util.RedisCache;
 import com.kerblogy.ctip.common.models.vo.JsonResultVO;
 import com.kerblogy.ctip.common.util.json.JacksonUtil;
-import com.nimbusds.jwt.JWTClaimsSet;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
 import java.io.IOException;
