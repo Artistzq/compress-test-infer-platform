@@ -1,17 +1,20 @@
 package com.kerbalogy.ctip.infer.od.controller;
 
 import com.kerbalogy.ctip.infer.od.dto.ObjectDetectArgs;
+import com.kerbalogy.ctip.infer.od.feign.ObjectDetectFeign;
 import com.kerbalogy.ctip.infer.od.service.ObjectDetectService;
 import com.kerblogy.ctip.common.util.json.JacksonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.*;
-import java.util.Arrays;
+import java.io.IOException;
 
 /**
  * @author yaozongqing@outlook.com
@@ -25,8 +28,11 @@ public class ObjectDetectionController {
     @Autowired
     ObjectDetectService objectDetectService;
 
+    @Autowired
+    ObjectDetectFeign feign;
+
     @PostMapping("/yolo")
-    public ResponseEntity postImage(
+    public ResponseEntity<?> postImage(
             @RequestParam("image") MultipartFile file,
             @RequestParam("args") String args
     ) {
@@ -39,7 +45,8 @@ public class ObjectDetectionController {
             throw new RuntimeException(e);
         }
 
-        byte[] processedImageBytes = objectDetectService.requestOd(imageBytes, odArgs);
+//        byte[] processedImageBytes = objectDetectService.requestOd(imageBytes, odArgs);
+        byte[] processedImageBytes = feign.requestOdResult(file, JacksonUtil.to(odArgs));
 
         // Set the response headers to indicate that the response is an image
         HttpHeaders headers = new HttpHeaders();

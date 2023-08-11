@@ -1,6 +1,7 @@
 package com.kerbalogy.ctip.infer.od.service.impl;
 
 import com.kerbalogy.ctip.infer.od.dto.ObjectDetectArgs;
+import com.kerbalogy.ctip.infer.od.dto.OdFeignRequest;
 import com.kerbalogy.ctip.infer.od.feign.ObjectDetectFeign;
 import com.kerbalogy.ctip.infer.od.service.ObjectDetectService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,9 @@ public class ObjectDetectServiceImpl implements ObjectDetectService {
 
     @Override
     public byte[] requestOd(byte[] bytes, ObjectDetectArgs args) {
-        return objectDetectFeign.requestOdResult(bytes, args);
+        return objectDetectFeign.requestOdResult(OdFeignRequest.builder()
+                .image(bytes)
+                .objectDetectArgs(args)
+                .build());
     }
 }
