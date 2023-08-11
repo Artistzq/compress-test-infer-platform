@@ -1,104 +1,44 @@
 package com.kerbalogy.ctip.auth.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-
-import java.io.Serial;
-import java.io.Serializable;
-import java.util.Date;
 
 /**
  * @author yaozongqing@outlook.com
- * @date 2023-08-01
- * @description
+ * @date 2023-08-09
+ * @description 用户表
  **/
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-@Builder
-@TableName("sys_user")
-public class User implements Serializable {
-
-    @Serial
-    private static final long serialVersionUID = -40356785423868312L;
-
-    /**
-     * 主键
-     */
-    private Long id;
-
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
+@TableName("tb_user")
+public class User extends BaseEntity{
     /**
      * 用户名
      */
-    private String userName;
-
-    /**
-     * 昵称
-     */
-    private String nickName;
+    @TableField(value = "username")
+    private String username;
 
     /**
      * 密码
      */
+    @TableField(value = "password")
     private String password;
 
     /**
-     * 账号状态（0正常 1停用）
+     * 注册手机号
      */
-    private Integer status;
+    @TableField(value = "phone")
+    private String phone;
 
     /**
-     * 邮箱
+     * 注册邮箱
      */
+    @TableField(value = "email")
     private String email;
-
-    /**
-     * 手机号
-     */
-    private String phonenumber;
-
-    /**
-     * 用户性别（0男，1女，2未知）
-     */
-    private String sex;
-
-    /**
-     * 头像
-     */
-    private String avatar;
-
-    /**
-     * 用户类型（0管理员，1普通用户）
-     */
-    private String userType;
-
-    /**
-     * 创建人的用户id
-     */
-    private Long createBy;
-
-    /**
-     * 更新人
-     */
-    private Long updateBy;
-
-    /**
-     * 创建时间
-     */
-    private Date createTime;
-
-    /**
-     * 更新时间
-     */
-
-    private Date updateTime;
-
-    /**
-     * 删除标志（0代表未删除，1代表已删除）
-     */
-    private Integer delFlag;
 }
-
