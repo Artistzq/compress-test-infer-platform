@@ -92,10 +92,10 @@ public class JwtService {
         return JacksonUtil.from(jwtClaimsSet.getSubject(), clazz);
     }
 
-    public boolean valid(String jwt) {
+    public boolean expired(String jwt) {
         JWTClaimsSet jwtClaimsSet = parseJWT(jwt);
         Date expirationTime = jwtClaimsSet.getExpirationTime();
-        return !expirationTime.before(new Date());
+        return expirationTime.before(new Date());
     }
 
     public SecretKey generalKey() {

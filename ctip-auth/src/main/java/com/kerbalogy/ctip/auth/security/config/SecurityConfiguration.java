@@ -1,6 +1,6 @@
 package com.kerbalogy.ctip.auth.security.config;
 
-import com.kerbalogy.ctip.auth.security.filter.AuthenticationFilter;
+import com.kerbalogy.ctip.auth.security.filter.JwtAuthenticationFilter;
 import com.kerbalogy.ctip.auth.security.handler.*;
 import com.kerbalogy.ctip.auth.security.service.RedisTokenService;
 import com.kerbalogy.ctip.auth.security.service.UserDetailsServiceImpl;
@@ -85,7 +85,7 @@ public class SecurityConfiguration {
                                         .loginPage("/api/auth/login")
                                         .permitAll()
                                         // 配置自定义的登录成功处理程序
-                                        .successHandler(new UserAuthSuccessHandler(redisTokenService))
+                                        .successHandler(new UserAuthSuccessHandler(jwtService))
                                         // 配置自定义的登录失败处理程序
                                         .failureHandler(new UserAuthFailureHandler())
                                         .and()
@@ -105,7 +105,7 @@ public class SecurityConfiguration {
                         }
                 );
         // 在UsernamePasswordAuthenticationFilter之前添加自定义的过滤器
-        httpSecurity.addFilterBefore(new AuthenticationFilter(redisTokenService, jwtService),
+        httpSecurity.addFilterBefore(new JwtAuthenticationFilter(jwtService, userDetailsService),
                 UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }
