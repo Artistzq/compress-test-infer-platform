@@ -5,22 +5,19 @@ import com.kerbalogy.ctip.auth.constant.TokenConstant;
 import com.kerbalogy.ctip.auth.entity.User;
 import com.kerbalogy.ctip.auth.security.entity.SecurityUserDetails;
 import com.kerbalogy.ctip.auth.security.service.JwtService;
+import com.kerbalogy.ctip.auth.security.util.ResponseUtil;
 import com.kerbalogy.ctip.auth.util.RedisCache;
 import com.kerblogy.ctip.common.models.vo.JsonResultVO;
-import com.kerblogy.ctip.common.util.json.JacksonUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.Builder;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.MediaType;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -61,7 +58,7 @@ public class UserAuthSuccessHandler implements AuthenticationSuccessHandler {
         // TODO：如果登录过了，就不用登录了，也不返回新的accessToken
         if (redisCache.getCacheObject(RedisKey.REFRESH.concat(userDetails.getUsername()), String.class) != null) {
             log.info("已登录，无需再登录，不返回token");
-            setResponse(response, JsonResultVO.success("已登录，无需重复登录。"));
+            ResponseUtil.setResponse(response, JsonResultVO.success("已登录，无需重复登录。"));
             return;
         }
 
@@ -79,18 +76,7 @@ public class UserAuthSuccessHandler implements AuthenticationSuccessHandler {
         String refreshToken = jwtService.createJWT(userDetails.getUsername(), TokenConstant.REFRESH_TIME);
         redisCache.setCacheObject(RedisKey.REFRESH.concat(userDetails.getUsername()), refreshToken,
                 TokenConstant.REFRESH_TIME, TimeUnit.MILLISECONDS);
-        setResponse(response, result);
-    }
-
-    private <T> void setResponse(HttpServletResponse response, T result) {
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        response.setCharacterEncoding(StandardCharsets.UTF_8.name());
-        response.setStatus(HttpServletResponse.SC_OK);
-        try {
-            response.getWriter().append(JacksonUtil.to(result));
-        } catch (IOException e) {
-            throw new BadCredentialsException("登录信息IO异常：" + e.getMessage());
-        }
+        ResponseUtil.setResponse(response, result);
     }
 
 }

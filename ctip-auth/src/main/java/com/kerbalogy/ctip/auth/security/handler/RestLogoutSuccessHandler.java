@@ -1,40 +1,57 @@
 package com.kerbalogy.ctip.auth.security.handler;
 
 import com.kerbalogy.ctip.auth.constant.HeaderConstant;
-import com.kerbalogy.ctip.auth.security.service.RedisTokenService;
+import com.kerbalogy.ctip.auth.constant.RedisKey;
+import com.kerbalogy.ctip.auth.security.service.JwtService;
+import com.kerbalogy.ctip.auth.security.util.ResponseUtil;
+import com.kerbalogy.ctip.auth.util.RedisCache;
 import com.kerblogy.ctip.common.models.vo.JsonResultVO;
-import com.kerblogy.ctip.common.util.json.JacksonUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.http.MediaType;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 
 /**
  * @author yaozongqing@outlook.com
  * @date 2023-08-09
  * @description
  **/
+@Slf4j
 public class RestLogoutSuccessHandler implements LogoutSuccessHandler {
 
-    private final RedisTokenService redisTokenService;
+    private final RedisCache redisCache;
 
-    public RestLogoutSuccessHandler(RedisTokenService redisTokenService) {
-        this.redisTokenService = redisTokenService;
+    private final JwtService jwtService;
+
+    public RestLogoutSuccessHandler(RedisCache redisCache, JwtService jwtService) {
+        this.redisCache = redisCache;
+        this.jwtService = jwtService;
     }
 
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-
+        log.info("登出处理====>");
         String token = request.getHeader(HeaderConstant.HEADER_TOKEN);
-        redisTokenService.removeToken(token);
+        JsonResultVO<String> jsonResultVO = null;
+        if (token == null || token.isBlank()) {
+            // 没有携带Token，无法登出
+            log.info("未携带token");
+            ResponseUtil.setResponse(response, JsonResultVO.fail("登出需要携带Access Token"));
+            return;
+        }
 
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        response.setCharacterEncoding(StandardCharsets.UTF_8.name());
-        response.setStatus(HttpServletResponse.SC_OK);
-        response.getWriter().append(JacksonUtil.to(JsonResultVO.success()));
+        if (jwtService.expired(token)) {
+            // Token过期，同样无法登出
+            log.info("token过期");
+            ResponseUtil.setResponse(response, JsonResultVO.fail("Access Token已过期"));
+            return;
+        }
+
+        String username = jwtService.parseJwtSubject(token, String.class);
+        redisCache.deleteObject(RedisKey.REFRESH.concat(username));
+        ResponseUtil.setResponse(response, JsonResultVO.success(null, String.format("账户 [username=%s] 已经登出", username)));
     }
 }

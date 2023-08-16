@@ -4,7 +4,6 @@ import com.kerbalogy.ctip.auth.security.filter.JwtAuthenticationFilter;
 import com.kerbalogy.ctip.auth.security.filter.RefreshTokenFilter;
 import com.kerbalogy.ctip.auth.security.handler.*;
 import com.kerbalogy.ctip.auth.security.service.JwtService;
-import com.kerbalogy.ctip.auth.security.service.RedisTokenService;
 import com.kerbalogy.ctip.auth.security.service.UserDetailsServiceImpl;
 import com.kerbalogy.ctip.auth.util.RedisCache;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +27,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity(debug = true)
 public class SecurityConfiguration {
-
-    @Autowired
-    RedisTokenService redisTokenService;
 
     @Autowired
     JwtService jwtService;
@@ -102,7 +98,7 @@ public class SecurityConfiguration {
                                         // 配置自定义的登出URL
                                         .logoutUrl("/api/auth/logout")
                                         // 配置自定义的登出成功处理程序
-                                        .logoutSuccessHandler(new RestLogoutSuccessHandler(redisTokenService))
+                                        .logoutSuccessHandler(new RestLogoutSuccessHandler(redisCache, jwtService))
                                         .and()
                                         .sessionManagement()
                                         // 不使用会话
