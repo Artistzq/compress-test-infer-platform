@@ -23,7 +23,7 @@ public class RedisTokenService {
 
     private final static TimeUnit DEFAULT_TIME_UNIT = TimeUnit.SECONDS;
 
-    private final Integer expiration = 3600;
+    private final Long expiration = 3600L;
 
     @Autowired
     private RedisCache redisCache;

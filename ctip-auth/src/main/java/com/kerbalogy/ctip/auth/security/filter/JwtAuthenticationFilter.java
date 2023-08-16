@@ -40,17 +40,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         log.info("Enter: JwtAuthenticationFilter. 验证token，根据token，构建Authentication对象.");
 
         String token = request.getHeader(HeaderConstant.HEADER_TOKEN);
-        if (token == null) {
+        if (token == null || token.isBlank()) {
             // 没有携带Token，直接不通过
             log.info("未携带token");
             filterChain.doFilter(request, response);
             return;
         }
 
-        // 先实现完全无状态的，只用JWT，不用Redis
-        // 验证token
+        // 拿到的时accessToken，如果过期，就用refresh token重申请
         if (jwtService.expired(token)) {
-            log.error("token过期");
+            log.info("access Token过期，尝试重新申请");
             throw new AccessDeniedException("登录凭证已过期");
         }
 

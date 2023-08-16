@@ -1,8 +1,11 @@
 package com.kerbalogy.ctip.auth.security.handler;
 
+import com.kerbalogy.ctip.auth.constant.RedisKey;
+import com.kerbalogy.ctip.auth.constant.TokenConstant;
 import com.kerbalogy.ctip.auth.entity.User;
 import com.kerbalogy.ctip.auth.security.entity.SecurityUserDetails;
 import com.kerbalogy.ctip.auth.security.service.JwtService;
+import com.kerbalogy.ctip.auth.util.RedisCache;
 import com.kerblogy.ctip.common.models.vo.JsonResultVO;
 import com.kerblogy.ctip.common.util.json.JacksonUtil;
 import jakarta.servlet.ServletException;
@@ -18,6 +21,7 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author yaozongqing@outlook.com
@@ -27,10 +31,21 @@ import java.nio.charset.StandardCharsets;
 @Slf4j
 public class UserAuthSuccessHandler implements AuthenticationSuccessHandler {
 
+    @Data
+    @Builder
+    public static class LoginDTO {
+        private String accessToken;
+        private String username;
+        private String phone;
+    }
+
     private final JwtService jwtService;
 
-    public UserAuthSuccessHandler(JwtService jwtService) {
+    private final RedisCache redisCache;
+
+    public UserAuthSuccessHandler(JwtService jwtService, RedisCache redisCache) {
         this.jwtService = jwtService;
+        this.redisCache = redisCache;
     }
 
     @Override
@@ -43,8 +58,15 @@ public class UserAuthSuccessHandler implements AuthenticationSuccessHandler {
             throw new RuntimeException("用户认证成功后，SpringSecurityContext中却没有用户信息。");
         }
 
-        // 颁发token
-        String token = jwtService.createJWT(userDetails.getUsername());
+        // TODO：如果登录过了，就不用登录了，也不返回新的accessToken
+        if (redisCache.getCacheObject(RedisKey.REFRESH.concat(userDetails.getUsername()), String.class) != null) {
+            log.info("已登录，无需再登录，不返回token");
+            setResponse(response, JsonResultVO.success("已登录，无需重复登录。"));
+            return;
+        }
+
+        // 生成一个refresh token和一个access token，返回access token, refresh token落库
+        String token = jwtService.createJWT(userDetails.getUsername(), TokenConstant.ACCESS_TIME);
         User user = userDetails.getUser();
         LoginDTO loginDTO = LoginDTO.builder()
                 .accessToken(token)
@@ -53,6 +75,14 @@ public class UserAuthSuccessHandler implements AuthenticationSuccessHandler {
                 .build();
         JsonResultVO<LoginDTO> result = JsonResultVO.success(loginDTO);
 
+        // refresh token落库
+        String refreshToken = jwtService.createJWT(userDetails.getUsername(), TokenConstant.REFRESH_TIME);
+        redisCache.setCacheObject(RedisKey.REFRESH.concat(userDetails.getUsername()), refreshToken,
+                TokenConstant.REFRESH_TIME, TimeUnit.MILLISECONDS);
+        setResponse(response, result);
+    }
+
+    private <T> void setResponse(HttpServletResponse response, T result) {
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
         response.setStatus(HttpServletResponse.SC_OK);
@@ -61,14 +91,6 @@ public class UserAuthSuccessHandler implements AuthenticationSuccessHandler {
         } catch (IOException e) {
             throw new BadCredentialsException("登录信息IO异常：" + e.getMessage());
         }
-
     }
 
-    @Data
-    @Builder
-    public static class LoginDTO {
-        private String accessToken;
-        private String username;
-        private String phone;
-    }
 }

@@ -9,5 +9,7 @@ public class RedisKey {
     /**
      * auth:${id} -> token
      */
-    private final static String AUTHORITIES = "auth:";
+    public final static String AUTHORITIES = "auth:";
+
+    public final static String REFRESH = "refresh:";
 }
