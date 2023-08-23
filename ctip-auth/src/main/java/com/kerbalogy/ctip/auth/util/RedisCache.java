@@ -43,7 +43,7 @@ public class RedisCache
      * @param timeout 时间
      * @param timeUnit 时间颗粒度
      */
-    public <T> void setCacheObject(final String key, final T value, final Integer timeout, final TimeUnit timeUnit)
+    public <T> void setCacheObject(final String key, final T value, final Long timeout, final TimeUnit timeUnit)
     {
         redisTemplate.opsForValue().set(key, JacksonUtil.to(value), timeout, timeUnit);
     }
@@ -79,10 +79,9 @@ public class RedisCache
      * @param key 缓存键值
      * @return 缓存键值对应的数据
      */
-    public <T> T getCacheObject(final String key)
+    public String getCacheObject(final String key)
     {
-        ValueOperations<String, T> operation = redisTemplate.opsForValue();
-        return operation.get(key);
+        return getCacheObject(key, String.class);
     }
 
     public <T> T getCacheObject(final String key, Class<T> clazz) {
